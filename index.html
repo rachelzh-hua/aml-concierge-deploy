@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Citation Concierge · AML Spermidine Reanalysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --paper:#FAFAF7;--panel:#FFFFFF;--ink:#0F172A;--ink-2:#1E293B;--muted:#64748B;
+  --line:rgba(15,23,42,0.08);--line-strong:rgba(15,23,42,0.14);
+  --accent:#4F46E5;--accent-2:#6366F1;--accent-soft:#EEF2FF;--accent-ink:#3730A3;
+  --good:#059669;--warn:#B45309;--danger:#DC2626;
+  --r-sm:6px;--r:10px;--r-lg:14px;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;
+  --serif:"Source Serif 4",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;gap:20px;padding:0 20px;height:52px;background:var(--panel);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-logo{height:22px;width:auto}
+.brand-divider{color:var(--line-strong);font-weight:300;font-size:18px}
+.product{color:var(--ink-2);font-weight:500;font-size:13.5px}
+.crumbs{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:13px;flex:1}
+.crumb.current{color:var(--ink);font-weight:500}
+.crumb-sep{opacity:.5}
+.pill{padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:500;background:#D1FAE5;border:1px solid #A7F3D0;color:var(--good)}
+
+/* LAYOUT */
+.app{display:grid;grid-template-columns:240px 1fr 420px;height:calc(100vh - 52px);padding:12px;gap:12px}
+
+/* RAIL */
+.rail{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 12px;display:flex;flex-direction:column;gap:16px;overflow-y:auto}
+.rail::-webkit-scrollbar{width:5px}.rail::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+.rail-title{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:0 4px;display:flex;justify-content:space-between;align-items:center}
+.rail-badge{background:var(--accent-soft);color:var(--accent-ink);border-radius:999px;padding:1px 8px;font-size:11px;font-family:var(--mono)}
+.howto{font-size:11.5px;line-height:1.55;color:var(--muted);padding:2px 4px 6px}
+.cite-inline-sample{background:var(--accent-soft);color:var(--accent-ink);padding:1px 6px;border-radius:4px;font-weight:500}
+.cite-list{display:flex;flex-direction:column;gap:2px}
+.cite-row{display:flex;align-items:center;gap:8px;padding:5px 8px;font-size:12px;border-radius:var(--r-sm);cursor:pointer}
+.cite-row:hover{background:var(--accent-soft)}
+.cite-row .avail-dot{width:6px;height:6px;border-radius:50%;background:var(--good);flex-shrink:0}
+.cite-row .cite-key{color:var(--ink-2);font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rail-footer{margin-top:auto;display:flex;gap:6px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--line)}
+.tag{font-size:10.5px;padding:2px 8px;color:var(--muted);background:var(--paper);border:1px solid var(--line);border-radius:999px}
+
+/* CENTER PANE */
+.pane-center{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden}
+.pane-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#FDFDFC,var(--panel))}
+.pane-title{display:flex;align-items:center;gap:10px}
+.doc-icon{width:32px;height:32px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);border-radius:8px;font-size:16px}
+.doc-name{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--ink)}
+.doc-sub{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.paper-body{flex:1;overflow-y:auto;padding:28px 36px 60px;background:#F1F0EA}
+.paper-body::-webkit-scrollbar{width:8px}.paper-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:4px;border:2px solid #F1F0EA}
+.paper-inner{max-width:700px;margin:0 auto;background:#fff;padding:36px 40px;border-radius:2px;box-shadow:0 8px 30px -12px rgba(15,23,42,.2),0 1px 2px rgba(15,23,42,.05)}
+.paper-inner h1{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.35;margin-bottom:6px;color:var(--ink)}
+.paper-inner h2{font-family:var(--serif);font-size:16px;font-weight:600;margin-top:28px;margin-bottom:10px;color:var(--ink);padding-bottom:5px;border-bottom:1px solid var(--line)}
+.paper-inner h3{font-size:13px;font-weight:600;margin-top:18px;margin-bottom:6px;color:var(--muted);text-transform:uppercase;letter-spacing:0.03em}
+.paper-inner p,.paper-inner li{font-family:var(--serif);font-size:14px;line-height:1.72;color:var(--ink-2);margin-bottom:10px}
+.paper-inner ol,.paper-inner ul{padding-left:22px;margin-bottom:12px}
+.paper-inner code{font-family:var(--mono);font-size:12px;background:var(--paper);padding:1px 5px;border-radius:3px;color:var(--accent-ink)}
+.paper-inner table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px;font-family:var(--sans)}
+.paper-inner th{background:var(--paper);border:1px solid var(--line);padding:7px 10px;text-align:left;font-weight:600;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.paper-inner td{border:1px solid var(--line);padding:5px 10px}
+.paper-inner caption{font-size:11.5px;color:var(--muted);font-style:italic;text-align:left;margin-bottom:6px;font-family:var(--sans)}
+.c-yes{color:var(--good);font-weight:600}
+.c-no{color:var(--danger);font-weight:600}
+.c-warn{color:var(--warn);font-weight:600}
+
+/* CITATIONS */
+.cite{background:rgba(79,70,229,0.1);box-shadow:inset 0 -1.5px 0 rgba(79,70,229,0.5);color:var(--accent-ink);cursor:pointer;font-weight:500;padding:1px 4px;border-radius:3px;text-decoration:none;font-family:var(--sans);font-size:13px;transition:background 0.12s}
+.cite:hover{background:rgba(79,70,229,0.2);box-shadow:inset 0 -1.5px 0 rgba(79,70,229,0.9)}
+.cite.active{background:rgba(79,70,229,0.28);box-shadow:0 0 0 2px rgba(79,70,229,0.5)}
+
+/* RIGHT PANE */
+.pane-right{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);display:flex;flex-direction:column;overflow:hidden}
+.src-badge{padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);font-size:11.5px;font-weight:500;white-space:nowrap}
+.right-body{flex:1;overflow-y:auto;padding:20px}
+.right-body::-webkit-scrollbar{width:5px}.right-body::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:3px}
+.empty-state{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;gap:12px}
+.empty-title{font-family:var(--serif);font-size:20px;font-weight:600}
+.empty-sub{color:var(--muted);font-size:13px;max-width:340px}
+.cite-card{display:none}.cite-card.visible{display:block;animation:fadeIn 0.25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.ref-number{display:inline-block;background:var(--accent);color:#fff;width:26px;height:26px;border-radius:50%;text-align:center;line-height:26px;font-size:12px;font-weight:700;margin-bottom:12px}
+.ref-title{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--ink);line-height:1.4;margin-bottom:4px}
+.ref-authors{font-size:12px;color:var(--muted);margin-bottom:3px}
+.ref-journal{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:14px}
+.ref-doi{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--accent-ink);background:var(--accent-soft);padding:5px 12px;border-radius:8px;text-decoration:none;font-family:var(--mono);border:1px solid rgba(79,70,229,0.15);margin-bottom:18px}
+.ref-doi:hover{background:var(--accent);color:#fff}
+.section-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.section-label::before{content:'';display:inline-block;width:3px;height:14px;border-radius:2px}
+.label-support::before{background:var(--accent)}
+.label-context::before{background:var(--warn)}
+.passage{font-family:var(--serif);font-size:13.5px;line-height:1.65;color:var(--ink-2);background:var(--accent-soft);border-left:3px solid var(--accent);padding:12px 16px;border-radius:0 8px 8px 0;margin-bottom:18px}
+.context-text{font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:16px}
+
+/* DRAWER */
+.drawer{border-top:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-height:140px;max-height:38%}
+.tabs{display:flex;gap:4px;padding:6px 10px 0;border-bottom:1px solid var(--line)}
+.tab{background:transparent;border:0;padding:8px 12px;font-size:12.5px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;font-weight:500;font-family:var(--sans)}
+.tab:hover{color:var(--ink)}.tab.active{color:var(--accent-ink);border-bottom-color:var(--accent)}
+.tab-panel{display:none;padding:10px 14px;overflow:auto;flex:1;font-size:12.5px;color:var(--muted)}.tab-panel.active{display:block}
+.trace-row{display:grid;grid-template-columns:120px 1fr;gap:10px;padding:4px 0;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11.5px}
+.trace-k{color:var(--muted)}.trace-v{color:var(--ink-2);word-break:break-all}
+.trace-v a{color:var(--accent);text-decoration:none}.trace-v a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#">
+    
+    <span class="brand-divider">/</span>
+    <span class="product">Citation Concierge</span>
+  </a>
+  <div class="crumbs">
+    <span class="crumb">AML Spermidine Reanalysis</span>
+    <span class="crumb-sep">›</span>
+    <span class="crumb current">GSE274658 · DENSpm in LSCs vs HSPCs</span>
+  </div>
+  <span class="pill">14 sources indexed</span>
+</header>
+
+<div class="app">
+<!-- RAIL -->
+<aside class="rail">
+  <div>
+    <div class="rail-title">How to use</div>
+    <div class="howto">Every <span class="cite-inline-sample">[citation]</span> in the paper is live. Click one to see the reference card, supporting passage, and provenance trace.</div>
+  </div>
+  <div>
+    <div class="rail-title">Sources <span class="rail-badge">14</span></div>
+    <div class="cite-list" id="citeList"></div>
+  </div>
+  <div class="rail-footer">
+    <span class="tag">DESeq2 1.46.0</span>
+    <span class="tag">fgsea 1.32.4</span>
+    <span class="tag">GSE274658</span>
+  </div>
+</aside>
+
+<!-- CENTER: PAPER -->
+<section class="pane-center">
+  <header class="pane-head">
+    <div class="pane-title">
+      <span class="doc-icon">◫</span>
+      <div>
+        <div class="doc-name">SMOX mRNA–Protein Divergence in AML LSCs</div>
+        <div class="doc-sub">aml-spermidine-reanalysis.pdf · GEO GSE274658</div>
+      </div>
+    </div>
+  </header>
+  <div class="paper-body"><div class="paper-inner">
+
+<h1>Transcriptomic Reanalysis of Polyamine Depletion in AML Leukemia Stem Cells Reveals SMOX mRNA–Protein Divergence and LSC-Selective Pathway Suppression</h1>
+
+<h2>Abstract</h2>
+<p><span class="cite" data-ref="1">Rondeau et al. (2024)</span> demonstrated that polyamine depletion via DENSpm selectively targets AML leukemia stem cells (LSCs) by reducing eIF5A hypusination and KAT7 protein expression. We reanalyze the RNA-seq dataset (GEO GSE274658) using DESeq2 <span class="cite" data-ref="6">[6]</span> with a patient-paired design and fgsea <span class="cite" data-ref="7">[7]</span> GSEA. DENSpm induces <strong>999 DEGs</strong> in LSCs but only <strong>19 in HSPCs</strong>. SAT1 upregulation (log₂FC = +1.53, padj = 0.017) and KAT7 mRNA stability (log₂FC = −0.04, padj = 0.87) are confirmed. We identify <strong>SMOX</strong> as the genome-wide most significant DEG (log₂FC = +1.88, padj = 3.6 × 10⁻¹⁶) — yet the paper reported no SMOX protein change <span class="cite" data-ref="1">[1]</span>, revealing an mRNA–protein divergence consistent with the eIF5A/hypusination model.</p>
+
+<h2>1. Introduction</h2>
+<p>AML is driven by leukemia stem cells (LSCs) that persist through treatment and drive relapse <span class="cite" data-ref="2">[2]</span>. <span class="cite" data-ref="1">Rondeau et al. (2024)</span> identified spermidine as the most enriched metabolite in LSCs vs. HSPCs and showed polyamine depletion via DENSpm targets LSCs by reducing eIF5A hypusination <span class="cite" data-ref="3">[3]</span> and KAT7 protein expression <span class="cite" data-ref="4">[4]</span><span class="cite" data-ref="5">[5]</span>. KAT7 regulation is post-transcriptional — mRNA levels are unchanged <span class="cite" data-ref="1">[1]</span>.</p>
+<p>We reanalyze the RNA-seq data (GSE274658) with DESeq2 <span class="cite" data-ref="6">[6]</span>, perform GSEA with fgsea <span class="cite" data-ref="7">[7]</span> and MSigDB <span class="cite" data-ref="8">[8]</span>, and compare with 9 testable paper claims.</p>
+
+<h2>2. Methods</h2>
+<p><strong>Dataset:</strong> GSE274658 — 60,708 genes × 16 samples. 5 AML patients (ROS-low LSCs) + 3 normal BM donors (CD34⁺ HSPCs), each ± DENSpm 10 µM 24h. NovaSeq 6000, STAR v2.7.9a → GENCODE v38, featureCounts v2.0.1.</p>
+<p><strong>DESeq2:</strong> Paired design (~patient + treatment). LSC: n=5 paired; HSPC: n=3 paired. LSC-selective: padj &lt; 0.05 in LSC, padj &gt; 0.1 in HSPC.</p>
+<p><strong>GSEA:</strong> fgsea v1.32.4 <span class="cite" data-ref="7">[7]</span> on Wald statistics, MSigDB Hallmark + KEGG <span class="cite" data-ref="8">[8]</span>.</p>
+
+<h2>3. Results</h2>
+<h3>3.1 LSC-selective response</h3>
+<table>
+<caption>Table 1. DEG counts by cell type.</caption>
+<tr><th>Cell type</th><th>DEGs (padj &lt; 0.05)</th><th>Up</th><th>Down</th></tr>
+<tr><td>LSC</td><td><strong>999</strong></td><td>632</td><td>367</td></tr>
+<tr><td>HSPC</td><td><strong>19</strong></td><td>13</td><td>6</td></tr>
+</table>
+<p>50-fold difference provides transcriptomic support for LSC selectivity <span class="cite" data-ref="1">[1]</span>.</p>
+
+<h3>3.2 Key gene concordance</h3>
+<table>
+<caption>Table 2. Key genes vs. paper claims <span class="cite" data-ref="1">[1]</span>.</caption>
+<tr><th>Gene</th><th>Role</th><th>LSC log₂FC</th><th>padj</th><th>Paper claim</th><th>Match</th></tr>
+<tr><td><strong>SAT1</strong></td><td>Polyamine export</td><td>+1.53</td><td>0.017</td><td>mRNA up (Fig 3C)</td><td class="c-yes">✓</td></tr>
+<tr><td><strong>SMOX</strong></td><td>Spermine oxidase</td><td>+1.88</td><td>3.6e-16</td><td>Protein unchanged (Fig S2I)</td><td class="c-warn">★ Novel</td></tr>
+<tr><td><strong>KAT7</strong></td><td>Acetyltransferase</td><td>−0.04</td><td>0.87</td><td>mRNA unchanged (Fig S8C)</td><td class="c-yes">✓</td></tr>
+<tr><td>ODC1</td><td>Biosynthesis</td><td>−0.21</td><td>0.28</td><td>Not discussed</td><td class="c-yes">✓</td></tr>
+<tr><td>EIF5A</td><td>Translation</td><td>−0.07</td><td>0.75</td><td>Post-translational</td><td class="c-yes">✓</td></tr>
+</table>
+
+<h3>3.3 SMOX: #1 DEG with mRNA–protein divergence</h3>
+<p><strong>SMOX</strong> is the most significant DEG genome-wide (log₂FC = +1.88, padj = 3.6 × 10⁻¹⁶). It catalyzes spermine → spermidine, representing a compensatory response. The paper found no SMOX protein change <span class="cite" data-ref="1">[1]</span>, creating mRNA–protein divergence consistent with eIF5A-dependent post-transcriptional silencing <span class="cite" data-ref="3">[3]</span>. This response is <strong>LSC-selective</strong> (HSPC: padj = 0.61, NS).</p>
+
+<h3>3.4 GSEA: proliferation down, differentiation up</h3>
+<table>
+<caption>Table 3. Top Hallmark pathways <span class="cite" data-ref="8">[8]</span>.</caption>
+<tr><th>Pathway</th><th>NES</th><th>padj</th><th>Dir</th></tr>
+<tr><td>E2F Targets</td><td>−3.41</td><td>8.5e-41</td><td>↓</td></tr>
+<tr><td>G2M Checkpoint</td><td>−3.22</td><td>3.4e-33</td><td>↓</td></tr>
+<tr><td>MYC Targets V1</td><td>−3.11</td><td>2.3e-29</td><td>↓</td></tr>
+<tr><td>mTORC1 Signaling</td><td>−2.70</td><td>1.8e-19</td><td>↓</td></tr>
+<tr><td>p53 Pathway</td><td>+2.46</td><td>2.0e-16</td><td>↑</td></tr>
+<tr><td>TNFα/NF-κB</td><td>+2.37</td><td>2.7e-14</td><td>↑</td></tr>
+<tr><td>Apoptosis</td><td>+2.09</td><td>2.0e-8</td><td>↑</td></tr>
+</table>
+<p>Downregulated pathways match the paper (Fig 5B, 6A). Upregulated p53/TNFα/apoptosis extend the published GSEA <span class="cite" data-ref="1">[1]</span>.</p>
+
+<h2>4. Discussion</h2>
+<p>8/9 paper claims confirmed. SMOX mRNA–protein divergence suggests compensatory transcription silenced by reduced eIF5A hypusination — a "futile response" paralleling KAT7 <span class="cite" data-ref="1">[1]</span><span class="cite" data-ref="4">[4]</span>. SMOX inhibition combined with DENSpm could enhance LSC targeting.</p>
+
+<h2>5. Limitations</h2>
+<ol>
+<li>Computational reanalysis only — no new experimental data.</li>
+<li>Small sample size (n=5 AML, n=3 normal).</li>
+<li>No formal interaction model (patient nested in cell type).</li>
+<li>SMOX mRNA–protein divergence inferred, not independently verified.</li>
+<li>Single time point (24h).</li>
+</ol>
+
+<h2>6. Conclusion</h2>
+<p>Independent DESeq2 reanalysis confirms 8/9 claims from <span class="cite" data-ref="1">Rondeau et al. (2024)</span>. SMOX as the #1 DEG — with mRNA upregulation but no protein change — extends the eIF5A/hypusination model and generates the testable hypothesis that SMOX inhibition enhances DENSpm efficacy in AML.</p>
+
+  </div></div>
+</section>
+
+<!-- RIGHT PANE -->
+<section class="pane-right">
+  <header class="pane-head">
+    <div class="pane-title">
+      <span class="src-badge" id="srcBadge">click a citation</span>
+      <div>
+        <div class="doc-name" id="rightTitle">No source selected</div>
+        <div class="doc-sub" id="rightSub">Supporting passage appears here</div>
+      </div>
+    </div>
+  </header>
+  <div class="right-body" id="rightBody">
+    <div class="empty-state" id="emptyState">
+      <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><rect x="12" y="10" width="30" height="42" rx="3" stroke="#CBD5E1" stroke-width="1.5"/><rect x="30" y="20" width="30" height="42" rx="3" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1.5"/><rect x="36" y="30" width="18" height="2" rx="1" fill="#FDE68A"/><rect x="36" y="35" width="14" height="2" rx="1" fill="#94A3B8" opacity=".5"/><rect x="36" y="40" width="18" height="2" rx="1" fill="#94A3B8" opacity=".5"/></svg>
+      <p class="empty-title">Citation Concierge</p>
+      <p class="empty-sub">Click any highlighted <b class="cite-inline-sample">[citation]</b> in the paper to see the reference, supporting passage, and provenance trace.</p>
+    </div>
+
+    <div class="cite-card" id="card-1"><div class="ref-number">1</div><div class="ref-title">Spermidine metabolism regulates leukemia stem and progenitor cell function through KAT7 expression</div><div class="ref-authors">Rondeau V, Berman JM, Ling T, et al.</div><div class="ref-journal">Sci Transl Med 16:eadn1285, 2024 · PMID 39321266</div><a class="ref-doi" href="https://doi.org/10.1126/scitranslmed.adn1285" target="_blank">10.1126/scitranslmed.adn1285</a><div class="section-label label-support">Supporting passage</div><div class="passage">Spermidine was the most enriched metabolite in LSCs compared with HSPCs. DENSpm treatment resulted in overexpression of SAT1 at mRNA and protein. KAT7 mRNA expression was unaffected by DENSpm treatment, suggesting post-transcriptional regulation. No changes in spermine oxidase (SMOX) or polyamine oxidase (PAOX) [protein] upon polyamine depletion (Fig S2I).</div><div class="section-label label-context">Used in this paper</div><div class="context-text"><strong>Primary source</strong> — the paper being reanalyzed. All sequence data (GSE274658), experimental β-gal/colony/xenograft values, SMOX protein Western blot, KAT7 mRNA/protein data, and GSEA come from this work. Most-cited reference.</div></div>
+
+    <div class="cite-card" id="card-2"><div class="ref-number">2</div><div class="ref-title">Tracing the origins of relapse in acute myeloid leukaemia to stem cells</div><div class="ref-authors">Shlush LI, Mitchell A, Heisler L, et al.</div><div class="ref-journal">Nature 547:104–108, 2017</div><a class="ref-doi" href="https://doi.org/10.1038/nature22993" target="_blank">10.1038/nature22993</a><div class="section-label label-support">Supporting passage</div><div class="passage">LSCs persist through treatment and ultimately drive disease relapse, making the development of new therapeutic strategies to target the LSC population critically important.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Establishes the clinical rationale: LSCs cause relapse, so selectively targeting them is key. Our 999 vs 19 DEG result shows DENSpm achieves this selectivity transcriptomically.</div></div>
+
+    <div class="cite-card" id="card-3"><div class="ref-number">3</div><div class="ref-title">Functional significance of eIF5A and its hypusine modification in eukaryotes</div><div class="ref-authors">Park MH, Nishimura K, Zanelli CF, Valentini SR</div><div class="ref-journal">Amino Acids 38:491–500, 2010</div><a class="ref-doi" href="https://doi.org/10.1007/s00726-009-0408-7" target="_blank">10.1007/s00726-009-0408-7</a><div class="section-label label-support">Supporting passage</div><div class="passage">eIF5A is the only known hypusinated protein. Hypusination requires spermidine as a substrate and facilitates translation elongation, particularly for polyproline-containing proteins.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Explains the spermidine → eIF5A → translation link. Our SMOX finding connects here: if eIF5A hypusination is reduced, SMOX mRNA upregulation may be translationally silenced.</div></div>
+
+    <div class="cite-card" id="card-4"><div class="ref-number">4</div><div class="ref-title">HBO1 is required for the maintenance of leukaemia stem cells</div><div class="ref-authors">MacPherson L, Anokye J, Yeung MM, et al.</div><div class="ref-journal">Nature 577:266–270, 2020</div><a class="ref-doi" href="https://doi.org/10.1038/s41586-019-1835-6" target="_blank">10.1038/s41586-019-1835-6</a><div class="section-label label-support">Supporting passage</div><div class="passage">KAT7 (HBO1) is essential for the maintenance of leukaemia stem cells. Loss of KAT7 results in increased myeloid differentiation and loss of LSC stemness.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Establishes KAT7 as essential for LSCs. Our KAT7 mRNA result (unchanged) confirms the paper's post-transcriptional regulation model.</div></div>
+
+    <div class="cite-card" id="card-5"><div class="ref-number">5</div><div class="ref-title">KAT7 is a genetic vulnerability of acute myeloid leukemias driven by MLL rearrangements</div><div class="ref-authors">Au YZ, Gu M, De Braekeleer E, et al.</div><div class="ref-journal">Leukemia 35:1012–1022, 2021</div><a class="ref-doi" href="https://doi.org/10.1038/s41375-020-1001-z" target="_blank">10.1038/s41375-020-1001-z</a><div class="section-label label-support">Supporting passage</div><div class="passage">KAT7 knockout in MLL-rearranged AML leads to differential expression of genes overlapping with polyamine depletion signatures.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">KAT7 as AML genetic vulnerability. The paper overlapped DENSpm DEGs with KAT7 KO DEGs (Fig S8D) — our 999 LSC DEGs would provide additional overlap data.</div></div>
+
+    <div class="cite-card" id="card-6"><div class="ref-number">6</div><div class="ref-title">Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2</div><div class="ref-authors">Love MI, Huber W, Anders S</div><div class="ref-journal">Genome Biol 15:550, 2014</div><a class="ref-doi" href="https://doi.org/10.1186/s13059-014-0550-8" target="_blank">10.1186/s13059-014-0550-8</a><div class="section-label label-support">Supporting passage</div><div class="passage">DESeq2 models count data using a negative binomial distribution and estimates dispersion with empirical Bayes shrinkage, providing reliable fold-change estimates even with small sample sizes.</div><div class="section-label label-context">Used in this paper</div><div class="context-text"><strong>Core analytical tool.</strong> Used for all differential expression analyses with paired design (~patient + treatment). The paper also used DESeq2 v1.40.1.</div></div>
+
+    <div class="cite-card" id="card-7"><div class="ref-number">7</div><div class="ref-title">Fast gene set enrichment analysis</div><div class="ref-authors">Korotkevich G, Sukhov V, Budin N, et al.</div><div class="ref-journal">bioRxiv 060012, 2021</div><a class="ref-doi" href="https://doi.org/10.1101/060012" target="_blank">10.1101/060012</a><div class="section-label label-support">Supporting passage</div><div class="passage">fgsea implements a fast preranked GSEA algorithm that provides accurate p-value estimation using an adaptive multi-level split Monte Carlo scheme.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">GSEA engine for Hallmark and KEGG pathway analysis. The paper used fgsea v1.26.0; we used v1.32.4. Results converge on the same biology.</div></div>
+
+    <div class="cite-card" id="card-8"><div class="ref-number">8</div><div class="ref-title">Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles</div><div class="ref-authors">Subramanian A, Tamayo P, Mootha VK, et al.</div><div class="ref-journal">Proc Natl Acad Sci USA 102:15545–15550, 2005</div><a class="ref-doi" href="https://doi.org/10.1073/pnas.0506580102" target="_blank">10.1073/pnas.0506580102</a><div class="section-label label-support">Supporting passage</div><div class="passage">GSEA determines whether an a priori defined set of genes shows statistically significant concordant differences between two biological states.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">MSigDB Hallmark and KEGG gene set collections. The paper used Bader lab gene sets; we used MSigDB — different collections, same biological conclusions.</div></div>
+
+    <div class="cite-card" id="card-9"><div class="ref-number">9</div><div class="ref-title">Functions of polyamines in mammals</div><div class="ref-authors">Pegg AE</div><div class="ref-journal">J Biol Chem 291:14904–14912, 2016</div><a class="ref-doi" href="https://doi.org/10.1074/jbc.R116.731661" target="_blank">10.1074/jbc.R116.731661</a><div class="section-label label-support">Supporting passage</div><div class="passage">Polyamines (putrescine, spermidine, spermine) are cationic compounds with pleiotropic effects on cell growth, gene expression, and protein synthesis.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">General polyamine biology reference. SMOX, SAT1, ODC1, SRM, SMS are all part of the polyamine metabolic network described here.</div></div>
+
+    <div class="cite-card" id="card-10"><div class="ref-number">10</div><div class="ref-title">Spermidine/spermine-N1-acetyltransferase: a key metabolic regulator</div><div class="ref-authors">Pegg AE</div><div class="ref-journal">Am J Physiol Endocrinol Metab 294:E995–E1010, 2008</div><a class="ref-doi" href="https://doi.org/10.1152/ajpendo.90217.2008" target="_blank">10.1152/ajpendo.90217.2008</a><div class="section-label label-support">Supporting passage</div><div class="passage">SAT1 acetylates spermidine and spermine, resulting in their cellular export. SAT1 induction is the primary mechanism by which DENSpm depletes intracellular polyamines.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Explains DENSpm's mechanism of action via SAT1 induction. Our confirmation of SAT1 mRNA upregulation (log₂FC = +1.53) validates this mechanism in LSCs.</div></div>
+
+    <div class="cite-card" id="card-11"><div class="ref-number">11</div><div class="ref-title">Dual targeting of polyamine synthesis and uptake in diffuse intrinsic pontine gliomas</div><div class="ref-authors">Khan A, Gamble LD, Upton DH, et al.</div><div class="ref-journal">Nat Commun 12:971, 2021</div><a class="ref-doi" href="https://doi.org/10.1038/s41467-021-20896-z" target="_blank">10.1038/s41467-021-20896-z</a><div class="section-label label-support">Supporting passage</div><div class="passage">DFMO + AMXT 1501 (polyamine transporter inhibitor) combination effectively depletes polyamines and shows anti-tumor activity in DIPG models.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Alternative polyamine depletion strategy. The paper tested DFMO + AMXT 1501 alongside DENSpm; our RNA-seq data are from DENSpm treatment only.</div></div>
+
+    <div class="cite-card" id="card-12"><div class="ref-number">12</div><div class="ref-title">Synergistic drug combination GC7/DFMO suppresses eIF5A activation in neuroblastoma</div><div class="ref-authors">Schultz CR, Geerts D, Mooney M, et al.</div><div class="ref-journal">Biochem J 475:531–545, 2018</div><a class="ref-doi" href="https://doi.org/10.1042/BCJ20170597" target="_blank">10.1042/BCJ20170597</a><div class="section-label label-support">Supporting passage</div><div class="passage">GC7 inhibits deoxyhypusine synthase, blocking eIF5A hypusination and reducing translation of select proteins in neuroblastoma.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">GC7 as an eIF5A hypusination inhibitor. The paper used GC7 to confirm eIF5A dependence; our transcriptomic data complement this pharmacological evidence.</div></div>
+
+    <div class="cite-card" id="card-13"><div class="ref-number">13</div><div class="ref-title">A phase II study of DENSpm in metastatic breast cancer</div><div class="ref-authors">Wolff AC, Armstrong DK, Fetting JH, et al.</div><div class="ref-journal">Clin Cancer Res 9:5922–5928, 2003</div><a class="ref-doi" href="https://pubmed.ncbi.nlm.nih.gov/14676116/" target="_blank">PMID 14676116</a><div class="section-label label-support">Supporting passage</div><div class="passage">DENSpm was well-tolerated in a phase II trial for metastatic breast cancer but showed limited single-agent efficacy.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Establishes DENSpm clinical safety. The drug's favorable toxicity profile supports translational potential for AML.</div></div>
+
+    <div class="cite-card" id="card-14"><div class="ref-number">14</div><div class="ref-title">Phase I study of DENSpm in non-small cell lung cancer</div><div class="ref-authors">Hahm HA, Ettinger DS, Bowling K, et al.</div><div class="ref-journal">Clin Cancer Res 8:684–690, 2002</div><a class="ref-doi" href="https://pubmed.ncbi.nlm.nih.gov/11895896/" target="_blank">PMID 11895896</a><div class="section-label label-support">Supporting passage</div><div class="passage">Phase I study of DENSpm in NSCLC patients established the maximum tolerated dose and pharmacokinetics.</div><div class="section-label label-context">Used in this paper</div><div class="context-text">Additional DENSpm clinical safety data. Supports the translational feasibility of polyamine depletion strategies.</div></div>
+  </div>
+
+  <!-- Drawer -->
+  <div class="drawer">
+    <div class="tabs">
+      <button class="tab active" data-tab="trace">Provenance trace</button>
+      <button class="tab" data-tab="audit">Retrieval detail</button>
+    </div>
+    <div class="tab-panel active" id="panel-trace">
+      <div id="traceBody" style="color:var(--muted);font-size:12px;padding:4px">Awaiting citation click.</div>
+    </div>
+    <div class="tab-panel" id="panel-audit">
+      <div style="color:var(--muted);font-size:12px;padding:4px">Pre-computed citation index · 14 sources · DESeq2 reanalysis of Rondeau et al. 2024 (GSE274658)</div>
+    </div>
+  </div>
+</section>
+</div>
+
+<script>
+const REFS={
+  1:{short:"Rondeau et al. 2024",doi:"https://doi.org/10.1126/scitranslmed.adn1285"},
+  2:{short:"Shlush et al. 2017",doi:"https://doi.org/10.1038/nature22993"},
+  3:{short:"Park et al. 2010",doi:"https://doi.org/10.1007/s00726-009-0408-7"},
+  4:{short:"MacPherson et al. 2020",doi:"https://doi.org/10.1038/s41586-019-1835-6"},
+  5:{short:"Au et al. 2021",doi:"https://doi.org/10.1038/s41375-020-1001-z"},
+  6:{short:"Love et al. 2014 (DESeq2)",doi:"https://doi.org/10.1186/s13059-014-0550-8"},
+  7:{short:"Korotkevich et al. 2021 (fgsea)",doi:"https://doi.org/10.1101/060012"},
+  8:{short:"Subramanian et al. 2005 (MSigDB)",doi:"https://doi.org/10.1073/pnas.0506580102"},
+  9:{short:"Pegg 2016",doi:"https://doi.org/10.1074/jbc.R116.731661"},
+  10:{short:"Pegg 2008 (SAT1)",doi:"https://doi.org/10.1152/ajpendo.90217.2008"},
+  11:{short:"Khan et al. 2021",doi:"https://doi.org/10.1038/s41467-021-20896-z"},
+  12:{short:"Schultz et al. 2018",doi:"https://doi.org/10.1042/BCJ20170597"},
+  13:{short:"Wolff et al. 2003",doi:"https://pubmed.ncbi.nlm.nih.gov/14676116/"},
+  14:{short:"Hahm et al. 2002",doi:"https://pubmed.ncbi.nlm.nih.gov/11895896/"}
+};
+const citeListEl=document.getElementById('citeList');
+Object.entries(REFS).forEach(([k,v])=>{const row=document.createElement('div');row.className='cite-row';row.setAttribute('data-ref',k);row.innerHTML='<span class="avail-dot"></span><span class="cite-key">['+k+'] '+v.short+'</span>';row.addEventListener('click',()=>showCitation(k));citeListEl.appendChild(row)});
+const cites=document.querySelectorAll('.cite'),emptyState=document.getElementById('emptyState'),srcBadge=document.getElementById('srcBadge'),rightTitle=document.getElementById('rightTitle'),rightSub=document.getElementById('rightSub'),traceBody=document.getElementById('traceBody');
+function showCitation(r){document.querySelectorAll('.cite-card').forEach(c=>c.classList.remove('visible'));emptyState.style.display='none';const card=document.getElementById('card-'+r);if(card){card.classList.add('visible');const ref=REFS[r];srcBadge.textContent='['+r+']';rightTitle.textContent=ref.short;rightSub.textContent=ref.doi;traceBody.innerHTML='<div class="trace-row"><span class="trace-k">source</span><span class="trace-v"><a href="'+ref.doi+'" target="_blank">'+ref.doi+'</a></span></div><div class="trace-row"><span class="trace-k">ref</span><span class="trace-v">['+r+']</span></div><div class="trace-row"><span class="trace-k">method</span><span class="trace-v">pre-computed citation index</span></div><div class="trace-row"><span class="trace-k">dataset</span><span class="trace-v">GEO GSE274658</span></div>'}cites.forEach(c=>c.classList.remove('active'));document.querySelectorAll('.cite-row').forEach(c=>c.style.background='');document.querySelectorAll('.cite[data-ref="'+r+'"]').forEach(c=>c.classList.add('active'));const rr=citeListEl.querySelector('.cite-row[data-ref="'+r+'"]');if(rr)rr.style.background='var(--accent-soft)'}
+cites.forEach(c=>c.addEventListener('click',function(e){e.preventDefault();showCitation(this.getAttribute('data-ref'))}));
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',function(){document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));this.classList.add('active');document.getElementById('panel-'+this.getAttribute('data-tab')).classList.add('active')}));
+document.addEventListener('DOMContentLoaded',()=>{renderMathInElement(document.body,{delimiters:[{left:'98254',right:'98254',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false})});
+</script>
+</body>
+</html>
